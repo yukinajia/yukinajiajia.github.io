@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 | Personal Homepage</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e293b;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --text: #334155;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --secondary: #cbd5e1;
+            --light: #1e293b;
+            --dark: #f1f5f9;
+            --text: #e2e8f0;
+            --card-bg: #1e293b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--light);
+            transition: all 0.3s ease;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* 导航栏 */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        [data-theme="dark"] nav {
+            background: rgba(30,41,59,0.95);
+        }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37,99,235,0.3);
+        }
+        .btn-theme {
+            background: transparent;
+            color: var(--text);
+            font-size: 20px;
+            padding: 8px;
+        }
+        /* 英雄区 */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 50px;
+        }
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: fadeInUp 0.8s ease;
+        }
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+        /* 内容卡片 */
+        .section {
+            margin-bottom: 60px;
+        }
+        .section-title {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        /* 技能进度条 */
+        .skill-item {
+            margin-bottom: 20px;
+        }
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .skill-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        [data-theme="dark"] .skill-bar {
+            background: #334155;
+        }
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        /* 项目卡片 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        .project-img {
+            height: 180px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+        .project-content {
+            padding: 20px;
+        }
+        .project-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text);
+            opacity: 0.7;
+        }
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeInUp 0.6s ease backwards;
+        }
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .nav-wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="container nav-wrapper">
+            <div class="logo" id="logo">个人主页</div>
+            <div class="nav-controls">
+                <button class="btn btn-primary" id="lang-toggle">中文 / English</button>
+                <button class="btn btn-theme" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="hero-title">你好，我是陈佳仪</h1>
+            <p id="hero-desc">一名专注于数据分析与Python开发的学生，致力于用数据创造价值</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- 基本信息 -->
+        <section class="section fade-in" style="animation-delay: 0.1s">
+            <h2 class="section-title" id="basic-info-title">基本信息</h2>
+            <div class="card" id="basic-info-zh">
+                <p><strong>姓名：</strong>陈佳仪</p>
+                <p><strong>学校/专业：</strong>华东政法大学 数量金融专业</p>
+                <p><strong>研究方向：</strong>数据分析、量化建模、机器学习</p>
+                <p><strong>联系方式：</strong><i class="fas fa-envelope"></i> 2030520473@qq.com</p>
+            </div>
+            <div class="card" id="basic-info-en" style="display: none;">
+                <p><strong>Name：</strong>Chen Jiayi</p>
+                <p><strong>University/Major：</strong>Huadongzhenfa University, Finance</p>
+                <p><strong>Research Interests：</strong>Data Analysis, Quantitative Modeling, Machine Learning</p>
+                <p><strong>Contact：</strong><i class="fas fa-envelope"></i> 2030520473@qq.com</p>
+            </div>
+        </section>
+
+        <!-- 个人简介 -->
+        <section class="section fade-in" style="animation-delay: 0.2s">
+            <h2 class="section-title" id="about-title">个人简介</h2>
+            <div class="card" id="about-zh">
+                <p>我是一名对数据科学充满热情的学生，拥有扎实的Python编程基础和统计学知识。擅长使用Pandas、NumPy等工具进行数据清洗与可视化，曾参与多个数据分析项目，能够将复杂问题转化为可落地的解决方案。我注重代码的可读性与效率，同时具备良好的学术写作与沟通能力，期待在数据领域持续成长。</p>
+            </div>
+            <div class="card" id="about-en" style="display: none;">
+                <p>I am a student passionate about data science, with a solid foundation in Python programming and statistics. Proficient in data cleaning and visualization using tools like Pandas and NumPy, I have participated in multiple data analysis projects, capable of transforming complex problems into actionable solutions. I prioritize code readability and efficiency, while possessing strong academic writing and communication skills, looking forward to continuous growth in the data field.</p>
+            </div>
+        </section>
+
+        <!-- 技能 -->
+        <section class="section fade-in" style="animation-delay: 0.3s">
+            <h2 class="section-title" id="skills-title">核心技能</h2>
+            <div class="card" id="skills-zh">
+                <div class="skill-item">
+                    <div class="skill-name"><span>Python 编程</span><span>90%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>数据分析与可视化</span><span>85%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>计量/统计建模</span><span>80%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 80%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>学术写作</span><span>88%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 88%"></div></div>
+                </div>
+            </div>
+            <div class="card" id="skills-en" style="display: none;">
+                <div class="skill-item">
+                    <div class="skill-name"><span>Python Programming</span><span>90%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Data Analysis & Visualization</span><span>85%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Econometrics/Statistical Modeling</span><span>80%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 80%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Academic Writing</span><span>88%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 88%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 教育经历 -->
+        <section class="section fade-in" style="animation-delay: 0.4s">
+            <h2 class="section-title" id="education-title">教育经历</h2>
+            <div class="card" id="education-zh">
+                <p><strong>华东政法大学</strong> | 本科 | 数量金融 | 2024 - 2028</p>
+                <p>相关课程：数据结构、算法设计、机器学习基础、计量经济学、数据库原理</p>
+                <p>荣誉：校级奖学金、优秀学生干部</p>
+            </div>
+            <div class="card" id="education-en" style="display: none;">
+                <p><strong>Huadongzhenfa University</strong> | Bachelor | Finance | 2024 - 2028</p>
+                <p>Relevant Courses: Data Structures, Algorithm Design, Machine Learning Basics, Econometrics, Database Principles</p>
+                <p>Honors: University Scholarship, Outstanding Student Leader</p>
+            </div>
+        </section>
+
+        <!-- 创新模块：项目展示 -->
+        <section class="section fade-in" style="animation-delay: 0.5s">
+            <h2 class="section-title" id="projects-title">项目展示</h2>
+            <div class="projects-grid" id="projects-zh">
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-chart-line"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">电商用户行为分析</h3>
+                        <p>使用Python分析用户浏览、购买数据，构建用户画像，提升转化率15%。</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-robot"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">机器学习预测模型</h3>
+                        <p>基于Scikit-learn构建房价预测模型，MAE降低至0.8，准确率提升至89%。</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-book"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">学术论文可视化</h3>
+                        <p>使用Matplotlib绘制计量经济学图表，助力论文发表与成果展示。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="projects-grid" id="projects-en" style="display: none;">
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-chart-line"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">E-commerce User Behavior Analysis</h3>
+                        <p>Analyzed user browsing and purchase data with Python, built user personas, and improved conversion rate by 15%.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-robot"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Machine Learning Prediction Model</h3>
+                        <p>Built a house price prediction model with Scikit-learn, reduced MAE to 0.8, and improved accuracy to 89%.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img"><i class="fas fa-book"></i></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Academic Paper Visualization</h3>
+                        <p>Created econometric charts with Matplotlib to support paper publication and result presentation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p id="footer-text">最后更新日期：2026年03月23日 | © 2026 陈佳仪 版权所有</p>
+    </footer>
+
+    <script>
+        // 语言切换
+        let isZh = true;
+        const langToggle = document.getElementById('lang-toggle');
+        const zhElements = document.querySelectorAll('[id$="-zh"]');
+        const enElements = document.querySelectorAll('[id$="-en"]');
+        const textMap = {
+            logo: ["个人主页", "Personal Homepage"],
+            "hero-title": ["你好，我是陈佳仪", "Hi, I'm Chen Jiayi"],
+            "hero-desc": ["一名专注于数据分析与Python开发的学生，致力于用数据创造价值", "A student focused on data analysis and Python development, dedicated to creating value with data"],
+            "basic-info-title": ["基本信息", "Basic Information"],
+            "about-title": ["个人简介", "About Me"],
+            "skills-title": ["核心技能", "Core Skills"],
+            "education-title": ["教育经历", "Education"],
+            "projects-title": ["项目展示", "Projects"],
+            "footer-text": ["最后更新日期：2026年03月23日 | © 2026 陈佳仪 版权所有", "Last Updated: March 23, 2026 | © 2026 Chen Jiayi All Rights Reserved"],
+            "lang-toggle": ["中文 / English", "中文 / English"]
+        };
+
+        langToggle.addEventListener('click', () => {
+            isZh = !isZh;
+            zhElements.forEach(el => el.style.display = isZh ? 'block' : 'none');
+            enElements.forEach(el => el.style.display = isZh ? 'none' : 'block');
+            Object.keys(textMap).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = textMap[id][isZh ? 0 : 1];
+            });
+            document.documentElement.lang = isZh ? 'zh-CN' : 'en';
+        });
+
+        // 暗黑模式切换
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+        });
+
+        // 滚动
